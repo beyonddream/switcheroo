@@ -1,6 +1,15 @@
 # Overview
 Tool to collect, process and analyze attention/hyperactivity behavior of a computer user.
 
+The goal is to track accurately the foreground processes running on user machine
+and how often they are running. Run as a daemon, it that tracks this information 
+and stores it in a format that is used to further analysis of user behavior like 
+
+* How often on average user switches between processes ?
+* What is the attention span given to each processes ?
+* Under what categories does each of the processes fall into ?
+* etc...
+
 # Dependencies
 
 * python 3.9+
