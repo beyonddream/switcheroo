@@ -1,5 +1,5 @@
 # Overview
-Tool to collect, process and analyze attention/hyperactivity behavior of a computer user
+Tool to collect, process and analyze attention/hyperactivity behavior of a computer user.
 
 # Dependencies
 
