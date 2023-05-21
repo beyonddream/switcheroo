@@ -2,8 +2,10 @@
 name = "what-the-proc"
 version = "0.1.0"
 description = "Tool to collect, process and analyze attention, hyperactivity behavior of a computer user."
-authors = ["beyonddream <43626691+beyonddream@users.noreply.github.com>"]
-license = "MIT license"
+authors = ["Arun a.k.a beyonddream"]
+license = "MIT"
+readme = "README.md"
+build = "build.py"
 
 [tool.poetry.dependencies]
 python = "^3.9"
