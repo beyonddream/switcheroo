@@ -9,6 +9,8 @@ build = "build.py"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+numpy = "^1.23"
+structlog = "^23.1"
 
 [tool.poetry.dev-dependencies]
 

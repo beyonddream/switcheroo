@@ -5,8 +5,9 @@ from setuptools import Extension
 ext_modules = [
 
     Extension(
-        "what_the_proc.procer",
+        "what_the_proc.ext.procer",
         sources=["./src/what_the_proc/ext/procer.c"],
+        include_dirs=["./src/what_the_proc/ext/include"],
         extra_compile_args=["-O3"],
         optional=False,
     )
