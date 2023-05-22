@@ -19,7 +19,7 @@ and stores it in a format that is used to further analysis of user behavior like
 
 # Getting started
 
-I would advice creating a virtual environment localize installation files.
+I would advice creating a virtual environment to localize installation files.
 
 Install
 --------
@@ -33,7 +33,6 @@ Testing
 ```
 $ poetry run pytest
 ```
-
 
 
 # License
