@@ -1,6 +1,8 @@
 import os
+import glob
+import subprocess
 
-from ctypes import c_char_p
+from ctypes import (c_char_p, util)
 
 import numpy as np
 import structlog
@@ -9,8 +11,13 @@ __all__ = ["is_c_extension_loaded", "procer_get_name"]
 
 LOG = structlog.get_logger()
 
+app_path = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'])
+app_path = app_path.decode().strip()
+build_rpath = "build"
 extension_rpath = "what_the_proc/ext"
-so_path = os.path.dirname(os.path.abspath(__file__))+"/../../build/lib.macosx-10.9-x86_64-cpython-39/"+extension_rpath
+
+so_path = glob.glob(os.path.join(app_path, build_rpath, "*", extension_rpath))
+so_file = os.path.basename(*glob.glob(os.path.join(*so_path, '*.so')))
 
 C_EXTENSION_LOADED = False
 
@@ -19,7 +26,7 @@ def is_c_extension_loaded():
 
 try:
     # load the library using numpy
-    PROCER_LIB = np.ctypeslib.load_library("procer.cpython-39-darwin.so", so_path)
+    PROCER_LIB = np.ctypeslib.load_library(so_file, *so_path)
 
     # setup argument and response time for each of the public functions
     PROCER_LIB.procer_get_name.argtypes = [] # void
