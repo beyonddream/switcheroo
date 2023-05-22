@@ -17,6 +17,25 @@ and stores it in a format that is used to further analysis of user behavior like
 * poetry (build)
 * gcc/clang (c ext)
 
+# Getting started
+
+I would advice creating a virtual environment localize installation files.
+
+Install
+--------
+```
+$ pip install poetry
+$ poetry install
+```
+
+Testing
+-------
+```
+$ poetry run pytest
+```
+
+
+
 # License
 
 MIT License Copyright (c) 2023 beyonddream
