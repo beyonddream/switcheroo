@@ -8,4 +8,6 @@ def test_procer_load():
     assert is_c_extension_loaded() == True
 
 def test_procer_name():
-    assert procer_get_name() == b"what_the_proc"
+    actual = procer_get_name()
+    expected = "what_the_proc"
+    assert actual.decode('utf-8') == expected
