@@ -1,5 +1,5 @@
 
-from loader import (
+from procer_load import (
     is_c_extension_loaded,
     procer_get_name
 )
