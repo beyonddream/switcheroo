@@ -28,14 +28,17 @@
 
 #include "include/procer.h"
 
-const char *procer_get_name(void) {
-    
+const char *procer_get_name(void) 
+{
     const char *current_process_name = "what_the_proc";
     
     return current_process_name;
 }
 
-bool procer_get_process_info_all(process_info_all_s *out) {
+bool procer_get_process_info_all(process_info_all_s *out) 
+{
+
     out = NULL;
+    
     return true;
 }
