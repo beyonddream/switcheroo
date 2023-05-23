@@ -25,8 +25,22 @@
 #ifndef __PROCER_H__
 #define __PROCER_H__
 
+#include <time.h>
+
+typedef struct process_info {
+
+    char *name;
+    int pid;
+    time_t uptime;
+    time_t start_time;
+    time_t end_time;
+
+} process_info_s;
+
+typedef process_info_s process_info_all_s[];
 
 const char *procer_get_name(void);
 
+bool procer_get_process_info_all(process_info_all_s *out);
 
 #endif /* __PROCER_H__ */
