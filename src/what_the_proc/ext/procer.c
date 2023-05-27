@@ -38,7 +38,9 @@ const char *procer_get_name(void)
 bool procer_get_process_info_all(process_info_all_s *out) 
 {
 
-    out = NULL;
+    char *command = "ps -e";
+    
+
     
     return true;
 }
