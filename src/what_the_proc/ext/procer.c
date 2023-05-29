@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/event.h>
 
 #include "include/procer.h"
 
@@ -37,10 +38,42 @@ const char *procer_get_name(void)
 
 bool procer_get_process_info_all(process_info_all_s *out) 
 {
+    struct kevent events[MAX_EVENTS];
+    int kq;
 
-    char *command = "ps -e";
+    kq = kqueue();
     
+    if (kq == -1) {
+        printf("Failed to create kqueue.\n");
+        return false;
+    }
 
+    /* Register the process creation and destruction events */
+    struct kevent event;
+    EV_SET(&event, 1, EVFILT_PROC, EV_ADD | EV_ENABLE, NOTE_EXIT | NOTE_EXEC, 0, NULL);
+    if (kevent(kq, &event, 1, NULL, 0, NULL) == -1) {
+        printf("Failed to register for process events.\n");
+        return false;
+    }    
     
+    for(;;) {
+        int event_count = kevent(kq, NULL, 0, events, MAX_EVENTS, NULL);
+        if (event_count == -1) {
+            printf("Error in kevent.\n");
+            return false;
+        }
+
+        struct kevent event;
+        for (int i = 0; i < event_count; i++) {
+            event = events[i];
+            pid_t pid = event.ident;
+            if (event.fflags & NOTE_EXIT) {
+                printf("Process with PID (%d) has ended.\n", pid);
+            } else if (event.fflags & NOTE_EXEC) {
+                printf("Process with PID (%d) has started.\n", pid);
+            }
+        }
+    }
+
     return true;
-}
+}   

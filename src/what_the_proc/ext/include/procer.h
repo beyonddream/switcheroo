@@ -27,8 +27,9 @@
 
 #include <time.h>
 
-typedef struct process_info {
+#define MAX_EVENTS 32
 
+typedef struct process_info {
     char *name;
     int pid;
     time_t uptime;

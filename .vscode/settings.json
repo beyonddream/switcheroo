@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "procer.h": "c",
+        "event.h": "c",
+        "random": "c"
+    }
+}
