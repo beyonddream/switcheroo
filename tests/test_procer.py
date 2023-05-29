@@ -1,8 +1,6 @@
 
-from what_the_proc.procer_load import (
-    is_c_extension_loaded,
-    procer_get_name
-)
+from what_the_proc.procer_load import is_c_extension_loaded
+from what_the_proc.procer import procer_get_name
 
 def test_procer_load():
     assert is_c_extension_loaded() == True
