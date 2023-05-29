@@ -9,7 +9,7 @@ import structlog
 
 from typing import Any
 
-__all__ = ["is_c_extension_loaded", "procer_get_name"]
+__all__ = ["is_c_extension_loaded"]
 
 LOG = structlog.get_logger()
 
