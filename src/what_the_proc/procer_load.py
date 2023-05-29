@@ -7,6 +7,8 @@ from ctypes import (c_char_p, util)
 import numpy as np
 import structlog
 
+from typing import Any
+
 __all__ = ["is_c_extension_loaded", "procer_get_name"]
 
 LOG = structlog.get_logger()
@@ -24,6 +26,9 @@ C_EXTENSION_LOADED = False
 def is_c_extension_loaded():
     return C_EXTENSION_LOADED
 
+# C library for procer
+PROCER_LIB: Any
+
 try:
     # load the library using numpy
     PROCER_LIB = np.ctypeslib.load_library(so_file, *so_path)
@@ -31,13 +36,6 @@ try:
     # setup argument and response time for each of the public functions
     PROCER_LIB.procer_get_name.argtypes = [] # void
     PROCER_LIB.procer_get_name.restype = c_char_p
-
-    def procer_get_name():
-        name = PROCER_LIB.procer_get_name()
-        if not name:
-            raise Exception("procer_get_name returned empty process name!!!")
-        return name
-
     C_EXTENSION_LOADED = True
 except OSError:
     C_EXTENSION_LOADED = False

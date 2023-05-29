@@ -1,12 +1,11 @@
 
-from what_the_proc.procer_load import (
-    is_c_extension_loaded,
+from what_the_proc.procer import (
     procer_get_name
 )
 
 if __name__ == '__main__':
-    if is_c_extension_loaded():
+    try:
         name = procer_get_name()
         print(f"The current process name is {name}")
-    else:
-        print("Unable to get the current process name!!!")
+    except Exception as e:
+        print(f"Exception occured while calling procer_get_name - {e}")
