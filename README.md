@@ -11,6 +11,7 @@ and stores it in a format that is used to further analysis of user behavior like
   
 # Tool dependencies
 
+* Conda (optional - for managing multiple python versions)
 * python 3.9+
 * poetry (build/test)
 * gcc/clang (to build c extension)
