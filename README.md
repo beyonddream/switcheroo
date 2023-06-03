@@ -9,11 +9,12 @@ and stores it in a format that is used to further analysis of user behavior like
 * What is the attention span given to each processes ?
 * Under what categories does each of the processes fall into ?
   
-# Dependencies
+# Tool dependencies
 
 * python 3.9+
-* poetry (build)
-* gcc/clang (c ext)
+* poetry (build/test)
+* gcc/clang (to build c extension)
+* Macos (only supported OS for now)
 
 # Getting started
 
