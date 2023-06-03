@@ -26,12 +26,17 @@ $ pip install poetry
 $ poetry install
 ```
 
+Building
+-------
+```
+$ poetry build
+```
+
 Testing
 -------
 ```
 $ poetry run pytest
 ```
-
 
 # License
 

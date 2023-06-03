@@ -36,7 +36,7 @@ const char *procer_get_name(void)
     return current_process_name;
 }
 
-bool procer_get_process_info_all(process_info_all_s *out) 
+process_infos_s *procer_get_process_info_all(void)
 {
     struct kevent events[MAX_EVENTS];
     int kq;
@@ -45,7 +45,7 @@ bool procer_get_process_info_all(process_info_all_s *out)
     
     if (kq == -1) {
         printf("Failed to create kqueue.\n");
-        return false;
+        return NULL;
     }
 
     /* Register the process creation and destruction events */
@@ -53,7 +53,7 @@ bool procer_get_process_info_all(process_info_all_s *out)
     EV_SET(&event, 1, EVFILT_PROC, EV_ADD | EV_ENABLE, NOTE_EXIT | NOTE_EXEC, 0, NULL);
     if (kevent(kq, &event, 1, NULL, 0, NULL) == -1) {
         printf("Failed to register for process events.\n");
-        return false;
+        return NULL;
     }    
     
     for(;;) {
@@ -75,5 +75,5 @@ bool procer_get_process_info_all(process_info_all_s *out)
         }
     }
 
-    return true;
+    return NULL;
 }   

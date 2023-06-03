@@ -26,6 +26,7 @@
 #define __PROCER_H__
 
 #include <time.h>
+#include <sys/queue.h>
 
 #define MAX_EVENTS 32
 
@@ -35,13 +36,18 @@ typedef struct process_info {
     time_t uptime;
     time_t start_time;
     time_t end_time;
-
 } process_info_s;
+
+
+typedef struct process_infos {
+    SLIST_ENTRY(process_info) procs;
+} process_infos_s;
+
 
 typedef process_info_s process_info_all_s[];
 
 const char *procer_get_name(void);
 
-bool procer_get_process_info_all(process_info_all_s *out);
+process_infos_s *procer_get_process_info_all(void);
 
 #endif /* __PROCER_H__ */
