@@ -18,11 +18,13 @@ and stores it in a format that is used to further analysis of user behavior like
 
 # Getting started
 
-I would advice creating a virtual environment to localize installation files.
+I would advice creating a virtual environment to localize installation files, either via
+venv or conda.
 
 Install
 --------
 ```
+# assuming virtual environment is activated from here onwards
 $ pip install poetry
 $ poetry install
 ```
