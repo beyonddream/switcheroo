@@ -19,7 +19,22 @@ and stores it in a format that is used to further analysis of user behavior like
 # Getting started
 
 I would advice creating a virtual environment to localize installation files, either via
-venv or conda.
+venv or conda. See below on how to create a python virtual environment using conda.
+
+```
+$ conda create -n py39 python=3.9
+
+# new python 3.9 virtual environment created.
+
+$ conda activate py39
+
+# you are placed inside the python 3.9 virtual environment.
+
+$ conda deactivate
+
+# you are back to regular shell environment.
+
+```
 
 Install
 --------
