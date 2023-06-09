@@ -1,5 +1,5 @@
 
-🚨*Note that this project is under active development and currently doesn't accept pull requests.*🚨
+🚨 *Note that this project is under active development and currently doesn't accept pull requests.* 🚨
 
 # Overview
 ScreenTime like tool to collect, process and analyze attention/hyperactivity behavior of a computer user.
