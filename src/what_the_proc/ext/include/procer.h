@@ -30,14 +30,18 @@
 
 #define MAX_EVENTS 32
 
-typedef struct process_info {
-    char *name;
-    int pid;
-    time_t uptime;
+/* Info about a process from foreground to background view change */
+typedef struct process_info_view {
     time_t start_time;
     time_t end_time;
-} process_info_s;
+} process_info_view_s;
 
+/* Struct to store info about a particular process */
+typedef struct process_info {
+    int pid;
+    char *name;
+    SLIST_ENTRY(process_info) views; 
+} process_info_s;
 
 typedef struct process_infos {
     SLIST_ENTRY(process_info) procs;
