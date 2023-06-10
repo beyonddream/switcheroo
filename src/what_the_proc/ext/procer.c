@@ -29,6 +29,30 @@
 
 #include "include/procer.h"
 
+process_infos_s *procer_process_info_all_init(void)
+{
+    process_infos_s *process_infos = malloc(sizeof(*process_infos));
+
+    if (process_infos == NULL) {
+        printf("procer_process_info_all_init::malloc failed.\n");
+        exit(1);
+    }
+
+    SLIST_INIT(&process_infos->proc_info);
+    
+    return process_infos;
+}
+
+void procer_process_info_all_deinit(process_infos_s *process_infos)
+{
+    
+    SLIST_EMPTY(&process_infos->proc_info);
+    free(process_infos);
+    
+    return;
+}
+
+
 const char *procer_get_name(void) 
 {
     const char *current_process_name = "what_the_proc";

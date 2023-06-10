@@ -34,24 +34,27 @@
 typedef struct process_info_view {
     time_t start_time;
     time_t end_time;
+    SLIST_ENTRY(process_info_view) next;
 } process_info_view_s;
 
 /* Struct to store info about a particular process */
 typedef struct process_info {
     int pid;
     char *name;
-    SLIST_ENTRY(process_info) views; 
+    SLIST_ENTRY(process_info) next;
+    SLIST_HEAD(, process_info_view) proc_info_view;
 } process_info_s;
 
 typedef struct process_infos {
-    SLIST_ENTRY(process_info) procs;
+    SLIST_HEAD(, process_info) proc_info;
 } process_infos_s;
-
 
 typedef process_info_s process_info_all_s[];
 
-const char *procer_get_name(void);
 
+const char *procer_get_name(void);
+process_infos_s *procer_process_info_all_init(void);
+void procer_process_info_all_deinit(process_infos_s *);
 process_infos_s *procer_get_process_info_all(void);
 
 #endif /* __PROCER_H__ */
