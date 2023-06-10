@@ -22,9 +22,11 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <string.h>
 #include <sys/event.h>
 
 #include "include/procer.h"
@@ -39,19 +41,89 @@ process_infos_s *procer_process_info_all_init(void)
     }
 
     SLIST_INIT(&process_infos->proc_info);
-    
+
     return process_infos;
+}
+
+process_info_s *procer_process_info_init(void)
+{
+    process_info_s *process_info = malloc(sizeof(*process_info));
+
+    if (process_info == NULL) {
+        printf("procer_process_info_init::malloc failed.\n");
+        exit(1);
+    }
+
+    process_info->pid = -1;
+    process_info->name = NULL;
+    SLIST_INIT(&process_info->proc_info_view);
+
+    return process_info;
+}
+
+process_info_view_s *procer_process_info_view_init(void)
+{
+    process_info_view_s *process_info_view = malloc(sizeof(*process_info_view));
+
+    if (process_info_view == NULL) {
+         printf("procer_process_info_view_init::malloc failed.\n");
+         exit(1);
+    }
+
+    return process_info_view;
 }
 
 void procer_process_info_all_deinit(process_infos_s *process_infos)
 {
     
-    SLIST_EMPTY(&process_infos->proc_info);
+    if (process_infos == NULL) {
+        return;
+    }
+
+    process_info_s *process_info;
+    while(!SLIST_EMPTY(&process_infos->proc_info)) {
+        process_info = SLIST_FIRST(&process_infos->proc_info);
+        SLIST_REMOVE_HEAD(&process_infos->proc_info, next);
+        procer_process_info_deinit(process_info);
+    }
+
     free(process_infos);
-    
     return;
 }
 
+void procer_process_info_deinit(process_info_s *process_info)
+{
+
+    if (process_info == NULL) {
+        return;
+    }
+
+    if (process_info->name != NULL) {
+        free(process_info->name);
+        process_info->name = NULL;
+    }
+
+    process_info_view_s *process_inf_view;
+    while(!SLIST_EMPTY(&process_info->proc_info_view)) {
+        process_inf_view = SLIST_FIRST(&process_info->proc_info_view);
+        SLIST_REMOVE_HEAD(&process_info->proc_info_view, next);
+        procer_process_info_view_deinit(process_inf_view);
+    }
+
+    free(process_info);
+    return;
+}
+
+void procer_process_info_view_deinit(process_info_view_s *process_inf_view)
+{
+
+    if (process_inf_view == NULL) {
+        return;
+    }
+
+    free(process_inf_view);
+    return;
+}
 
 const char *procer_get_name(void) 
 {

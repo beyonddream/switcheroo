@@ -25,19 +25,19 @@
 #ifndef __PROCER_H__
 #define __PROCER_H__
 
-#include <time.h>
 #include <sys/queue.h>
+#include <time.h>
 
 #define MAX_EVENTS 32
 
-/* Info about a process from foreground to background view change */
+/* Info about a process from time of foreground to background view change */
 typedef struct process_info_view {
     time_t start_time;
     time_t end_time;
     SLIST_ENTRY(process_info_view) next;
 } process_info_view_s;
 
-/* Struct to store info about a particular process */
+/* Info about a particular process */
 typedef struct process_info {
     int pid;
     char *name;
@@ -45,16 +45,23 @@ typedef struct process_info {
     SLIST_HEAD(, process_info_view) proc_info_view;
 } process_info_s;
 
+/* Info about a collection of processes */
 typedef struct process_infos {
     SLIST_HEAD(, process_info) proc_info;
 } process_infos_s;
 
-typedef process_info_s process_info_all_s[];
-
-
+/* Main API routines */
 const char *procer_get_name(void);
-process_infos_s *procer_process_info_all_init(void);
-void procer_process_info_all_deinit(process_infos_s *);
 process_infos_s *procer_get_process_info_all(void);
+
+/* Init routines */
+process_infos_s *procer_process_info_all_init(void);
+process_info_s *procer_process_info_init(void);
+process_info_view_s *procer_process_info_view_init(void);
+
+/* De-Init routines */
+void procer_process_info_all_deinit(process_infos_s *);
+void procer_process_info_deinit(process_info_s *);
+void procer_process_info_view_deinit(process_info_view_s *);
 
 #endif /* __PROCER_H__ */

@@ -3,6 +3,10 @@
         "procer.h": "c",
         "event.h": "c",
         "random": "c",
-        "queue.h": "c"
+        "queue.h": "c",
+        "cstring": "c",
+        "__bit_reference": "c",
+        "__string": "c",
+        "locale": "c"
     }
 }
