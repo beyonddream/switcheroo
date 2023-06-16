@@ -2,9 +2,12 @@ import os
 import glob
 import subprocess
 
-from ctypes import (c_char_p, util)
+import ctypes
+from ctypes import (c_char_p)
 
 import numpy as np
+from np.ctypeslib import ndpointer, Structure
+
 import structlog
 
 from typing import Any
@@ -26,6 +29,25 @@ C_EXTENSION_LOADED = False
 def is_c_extension_loaded():
     return C_EXTENSION_LOADED
 
+class ProcessInfoNext(ctypes.Structure):
+    pass
+
+class ProcessInfoNext(ctypes.Structure):
+    _fields = [
+        ("sle_next", ctypes.POINTER(ProcessInfoNext))
+    ]
+
+class ProcessInfoHead(ctypes.Structure):
+    _fields = [
+        ("slh_first", ctypes.POINTER(ProcessInfoNext))
+    ]
+
+class ProcessInfos(Structure):
+    _fields = [
+        ("proc_info", ProcessInfoHead)
+    ]
+
+
 # C library for procer
 PROCER_LIB: Any
 
@@ -33,9 +55,16 @@ try:
     # load the library using numpy
     PROCER_LIB = np.ctypeslib.load_library(so_file, *so_path)
 
-    # setup argument and response time for each of the public functions
+    # setup argument and response type for each of the public functions
+    
+    # procer_get_name()
     PROCER_LIB.procer_get_name.argtypes = [] # void
     PROCER_LIB.procer_get_name.restype = c_char_p
+
+    # procer_get_process_info_all()
+    PROCER_LIB.procer_get_process_info_all.argtypes = [] # void
+    
+
     C_EXTENSION_LOADED = True
 except OSError:
     C_EXTENSION_LOADED = False
