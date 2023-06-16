@@ -30,11 +30,8 @@ def is_c_extension_loaded():
     return C_EXTENSION_LOADED
 
 class ProcessInfoNext(ctypes.Structure):
-    pass
-
-class ProcessInfoNext(ctypes.Structure):
     _fields = [
-        ("sle_next", ctypes.POINTER(ProcessInfoNext))
+        ("sle_next", ctypes.POINTER('ProcessInfoNext'))
     ]
 
 class ProcessInfoHead(ctypes.Structure):
