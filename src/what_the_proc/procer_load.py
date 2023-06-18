@@ -3,10 +3,10 @@ import glob
 import subprocess
 
 import ctypes
-from ctypes import (c_char_p)
+from ctypes import (c_char_p, c_void_p)
 
 import numpy as np
-from np.ctypeslib import ndpointer, Structure
+from np.ctypeslib import ndpointer, Structure, POINTER
 
 import structlog
 
@@ -60,7 +60,7 @@ try:
 
     # procer_get_process_info_all()
     PROCER_LIB.procer_get_process_info_all.argtypes = [] # void
-    
+    PROCER_LIB.procer_get_name.restype = None #POINTER(ProcessInfos)
 
     C_EXTENSION_LOADED = True
 except OSError:

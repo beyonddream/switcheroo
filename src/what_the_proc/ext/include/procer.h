@@ -52,7 +52,7 @@ typedef struct process_infos {
 
 /* Main API routines */
 const char *procer_get_name(void);
-process_infos_s *procer_get_process_info_all(void);
+void procer_start_process_listener(void);
 
 /* Init routines */
 process_infos_s *procer_process_info_all_init(void);
