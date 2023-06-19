@@ -6,7 +6,6 @@ import ctypes
 from ctypes import (c_char_p, c_void_p)
 
 import numpy as np
-from np.ctypeslib import ndpointer, Structure, POINTER
 
 import structlog
 
@@ -29,22 +28,6 @@ C_EXTENSION_LOADED = False
 def is_c_extension_loaded():
     return C_EXTENSION_LOADED
 
-class ProcessInfoNext(ctypes.Structure):
-    _fields = [
-        ("sle_next", ctypes.POINTER('ProcessInfoNext'))
-    ]
-
-class ProcessInfoHead(ctypes.Structure):
-    _fields = [
-        ("slh_first", ctypes.POINTER(ProcessInfoNext))
-    ]
-
-class ProcessInfos(Structure):
-    _fields = [
-        ("proc_info", ProcessInfoHead)
-    ]
-
-
 # C library for procer
 PROCER_LIB: Any
 
@@ -59,8 +42,8 @@ try:
     PROCER_LIB.procer_get_name.restype = c_char_p
 
     # procer_get_process_info_all()
-    PROCER_LIB.procer_get_process_info_all.argtypes = [] # void
-    PROCER_LIB.procer_get_name.restype = None #POINTER(ProcessInfos)
+    PROCER_LIB.procer_start_process_listener.argtypes = [] # void
+    PROCER_LIB.procer_start_process_listener.restype = None
 
     C_EXTENSION_LOADED = True
 except OSError:

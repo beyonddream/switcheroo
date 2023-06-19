@@ -7,13 +7,13 @@ if is_c_extension_loaded():
         name = PROCER_LIB.procer_get_name()
         return name
     
-    def procer_get_process_info_all():
-        PROCER_LIB.procer_get_process_info_all()
+    def procer_start_process_listener():
+        PROCER_LIB.procer_start_process_listener()
         return
     
 else:
      def procer_get_name():
           raise Exception("Unable to get process name!!!")
      
-     def procer_get_process_info_all():
+     def procer_start_process_listener():
          raise Exception("Unable to call procer_get_process_info_all()")

@@ -151,7 +151,15 @@ void procer_start_process_listener(void)
         printf("Failed to register for process events.\n");
         return;
     }    
-    
+
+    /* Create a file and open them in write/append mode */
+    printf("going to create ./procer.dat");
+    FILE *file = fopen("./procer.dat", "w");
+    if (file == NULL) {
+        printf("Failed to open procer.dat\n");
+        return;
+    }
+
     for(;;) {
         int event_count = kevent(kq, NULL, 0, events, MAX_EVENTS, NULL);
         if (event_count == -1) {
@@ -160,13 +168,18 @@ void procer_start_process_listener(void)
         }
 
         struct kevent event;
-
         for (int i = 0; i < event_count; i++) {
             event = events[i];
             pid_t pid = event.ident;
             if (event.fflags & NOTE_EXIT) {
+                fputs("Process ended:", file);
+                fputs(pid, file);
+                fputs("\n", file);
                 printf("Process with PID (%d) has ended.\n", pid);
             } else if (event.fflags & NOTE_EXEC) {
+                fputs("Process started:", file);
+                fputs(pid, file);
+                fputs("\n", file);
                 printf("Process with PID (%d) has started.\n", pid);
             }
         }
