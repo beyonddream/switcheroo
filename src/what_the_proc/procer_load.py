@@ -3,7 +3,7 @@ import glob
 import subprocess
 
 import ctypes
-from ctypes import (c_char_p, c_void_p)
+from ctypes import (c_char_p, c_void_p, c_int)
 
 import numpy as np
 

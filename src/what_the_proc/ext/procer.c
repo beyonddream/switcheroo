@@ -28,7 +28,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/event.h>
+#include <sys/time.h>
 #include <unistd.h>
+#include <libproc.h>
 
 #include "include/procer.h"
 
@@ -142,7 +144,7 @@ const char *procer_get_name(void)
     return current_process_name;
 }
 
-void procer_start_process_listener(pid_t file_pid)
+void procer_start_process_listener(void)
 {
     struct kevent events[MAX_EVENTS];
     int kq;
@@ -150,52 +152,81 @@ void procer_start_process_listener(pid_t file_pid)
 
     kq = kqueue();
 
-    if (kq == -1)
-    {
+    if (kq == -1) {
         printf("Failed to create kqueue.\n");
         return;
+    } else {
+        printf("kq is creation succeeded.\n");
     }
+
+    int pids[MAX_EVENTS];
+    int count = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
+
+    struct kevent event;
+    
+    /* Timeout of 10 seconds */
+    struct timespec timeout;
+    timeout.tv_sec = 10;
+    timeout.tv_nsec = 0;
 
     /* Register the process creation and destruction events */
-    struct kevent event;
-    EV_SET(&event, 1, EVFILT_PROC, EV_ADD | EV_ENABLE, NOTE_EXIT | NOTE_EXEC, 0, NULL);
-    if (kevent(kq, &event, 1, NULL, 0, NULL) == -1)
-    {
-        printf("Failed to register for process events.\n");
-        return;
+    for (int i = 0; i < count; i++) {
+        EV_SET(&event, pids[i], EVFILT_PROC | EVFILT_SIGNAL, EV_ADD | EV_ENABLE,
+        NOTE_EXIT | NOTE_EXEC | NOTE_EXITSTATUS | NOTE_SIGNAL, 0, NULL);
+        if (kevent(kq, &event, 1, NULL, 0, &timeout) == -1) {
+            perror("Failed to register for process events.\n");
+            continue;
+        }
+        printf("Process events registration succeeded.\n");  
     }
 
-    for (;;)
-    {
-        int event_count = kevent(kq, NULL, 0, events, MAX_EVENTS, NULL);
-        if (event_count == -1)
-        {
-            printf("Error in kevent.\n");
-            return;
+    for(;;) {
+
+        int event_count = kevent(kq, NULL, 0, &event, 1, &timeout);
+        if (event_count == -1) {
+            printf("Error in kevent. event_count == -1\n");
+            goto exit;
+        } else {
+            printf("event_count is %d\n", event_count);
         }
 
-        struct kevent event;
         for (int i = 0; i < event_count; i++)
         {
             event = events[i];
             pid_t pid = event.ident;
             buf[0] = pid;
-            if (event.fflags & NOTE_EXIT)
-            {
-                write(file_pid, "e:", 2);
-                write(file_pid, buf, 1);
-                write(file_pid, "\n", 1);
+            if (event.fflags & NOTE_EXIT) {
+                write(1, "e:", 2);
+                write(1, buf, 1);
+                write(1, "\n", 1);
                 printf("Process with PID (%d) has ended.\n", pid);
-            }
-            else if (event.fflags & NOTE_EXEC)
-            {
-                write(file_pid, "s:", 2);
-                write(file_pid, buf, 1);
-                write(file_pid, "\n", 1);
+            } else if (event.fflags & NOTE_EXEC) {
+                write(1, "s:", 2);
+                write(1, buf, 1);
+                write(1, "\n", 1);
                 printf("Process with PID (%d) has started.\n", pid);
+            } else if (event.fflags & NOTE_EXITSTATUS) {
+                write(1, "ex:", 3);
+                write(1, buf, 1);
+                write(1, "\n", 1);
+                printf("Process with PID (%d) has ended.\n", pid);
+            } else if (event.fflags & NOTE_SIGNAL) {
+                write(1, "s:", 2);
+                write(1, buf, 1);
+                write(1, "\n", 1);
+                printf("Process with PID (%d) has received signal (%ld).\n", pid, event.data);
+            } else {
+                write(1, "u:", 2);
+                write(1, buf, 1);
+                write(1, "\n", 1);
+                printf("Process with PID (%d) has unknown event.\n", pid);
             }
         }
+
+        sleep(1);
     }
 
+exit:
+    close(kq);
     return;
 }
