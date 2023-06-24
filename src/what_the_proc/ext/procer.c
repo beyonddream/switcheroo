@@ -189,7 +189,7 @@ void procer_start_process_listener(pid_t file_pid)
             }
             else if (event.fflags & NOTE_EXEC)
             {
-                 write(file_pid, "s:", 2);
+                write(file_pid, "s:", 2);
                 write(file_pid, buf, 1);
                 write(file_pid, "\n", 1);
                 printf("Process with PID (%d) has started.\n", pid);
