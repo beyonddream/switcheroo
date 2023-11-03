@@ -16,4 +16,4 @@ else:
           raise Exception("Unable to get process name!!!")
      
      def procer_start_process_listener():
-         raise Exception("Unable to call procer_get_process_info_all()")
+         raise Exception("Unable to call start process listener")
